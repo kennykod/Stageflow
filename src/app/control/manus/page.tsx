@@ -15,6 +15,7 @@ import { extractPdfText } from "@/lib/pdf-extract";
 import { fmtStamp } from "@/lib/time";
 import type { Script } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { ASSET_BASE, DOWNLOADS_BLOCKED } from "@/lib/env";
 
 export default function ScriptsAdmin() {
   const { meId, myProductions } = useControlData();
@@ -353,7 +354,7 @@ function ImportDialog({ open, onOpenChange, productions, actorId }: { open: bool
                     disabled={!rights}
                     data-testid="use-sample-pdf"
                     onClick={async () => {
-                      const res = await fetch("/demo/exempelmanus-kvinnorna-vid-havet.pdf");
+                      const res = await fetch(`${ASSET_BASE}demo/exempelmanus-kvinnorna-vid-havet.pdf`);
                       const blob = await res.blob();
                       handleFile(new File([blob], "exempelmanus-kvinnorna-vid-havet.pdf", { type: "application/pdf" }));
                     }}
@@ -365,9 +366,11 @@ function ImportDialog({ open, onOpenChange, productions, actorId }: { open: bool
               </>
             )}
           </div>
-          <a href="/demo/exempelmanus-kvinnorna-vid-havet.pdf" download className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-3 hover:text-ink">
-            <Download className="size-3.5" /> Ladda ner exempel-PDF:en (fiktiv)
-          </a>
+          {!DOWNLOADS_BLOCKED && (
+            <a href="/demo/exempelmanus-kvinnorna-vid-havet.pdf" download className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-3 hover:text-ink">
+              <Download className="size-3.5" /> Ladda ner exempel-PDF:en (fiktiv)
+            </a>
+          )}
         </div>
       ) : (
         result && (

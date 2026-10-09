@@ -22,7 +22,14 @@ export function PersonalShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { unacked } = usePersonalData();
   const immersive = pathname.includes("/repetera");
-  const embedded = typeof window !== "undefined" && window.self !== window.top;
+  // Embedded = shown inside the split demo's phone frame (our own iframe), not just "in some frame".
+  const embedded = (() => {
+    try {
+      return !!window.frameElement?.hasAttribute("data-sf-pane");
+    } catch {
+      return false;
+    }
+  })();
 
   return (
     <div className="min-h-dvh lg:grain lg:flex lg:items-start lg:justify-center lg:gap-12 lg:px-8 lg:py-8">

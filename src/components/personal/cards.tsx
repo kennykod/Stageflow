@@ -7,6 +7,7 @@ import { useStore } from "@/lib/store";
 import { useLookups, type InboxItem } from "@/lib/hooks";
 import { TYPE_LABEL, rolesFor } from "@/lib/domain";
 import { buildICS, downloadICS } from "@/lib/ics";
+import { DOWNLOAD_BLOCKED_MSG } from "@/lib/env";
 import { p, capitalize, dayLabel, fmtDayLong, fmtRange, fmtStamp, fmtTime, relativeTo } from "@/lib/time";
 import type { Rehearsal } from "@/lib/types";
 import { cn, prodVars } from "@/lib/utils";
@@ -20,8 +21,9 @@ export function useScriptForProduction(productionId: string) {
 
 export function addToCalendar(r: Rehearsal, L: ReturnType<typeof useLookups>) {
   const d = r.published!;
-  downloadICS(`stageflow-${d.start.slice(0, 10)}.ics`, buildICS(r.id, d, L.room(d.roomId), L.production(r.productionId)));
-  toast({ title: "Kalenderfil hämtad", body: "Öppna .ics-filen för att lägga till i din kalender." });
+  const ok = downloadICS(`stageflow-${d.start.slice(0, 10)}.ics`, buildICS(r.id, d, L.room(d.roomId), L.production(r.productionId)));
+  if (ok) toast({ title: "Kalenderfil hämtad", body: "Öppna .ics-filen för att lägga till i din kalender." });
+  else toast({ title: "Kalenderfilen kunde inte sparas här", body: DOWNLOAD_BLOCKED_MSG, tone: "info" });
 }
 
 /** The hero card on Today. */

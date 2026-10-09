@@ -1,0 +1,6 @@
+/* Overrides for the artifact viewer's page skeleton (it sets a 14px body font). */
+body {
+  font-size: 16px;
+  background: var(--canvas);
+  color: var(--ink);
+}

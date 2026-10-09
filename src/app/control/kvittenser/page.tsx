@@ -13,6 +13,7 @@ import { useCan, useLookups } from "@/lib/hooks";
 import { capitalize, fmtDayLong, fmtRange, fmtStamp } from "@/lib/time";
 import type { Dispatch, Notification } from "@/lib/types";
 import { cn, plural } from "@/lib/utils";
+import { DOWNLOADS_BLOCKED, DOWNLOAD_BLOCKED_MSG } from "@/lib/env";
 
 const KIND: Record<Dispatch["kind"], { label: string; tone: "info" | "warn" | "bad" | "neutral" }> = {
   ny: { label: "Ny kallelse", tone: "info" },
@@ -260,6 +261,7 @@ function AuditLog({ allowedIds }: { allowedIds: string[] }) {
   const rows = audit.filter((a) => (!a.productionId || allowedIds.includes(a.productionId)) && (!q || a.summary.toLowerCase().includes(q.toLowerCase()) || (L.person(a.actorId)?.name ?? "").toLowerCase().includes(q.toLowerCase())));
 
   const exportCsv = () => {
+    if (DOWNLOADS_BLOCKED) return toast({ title: "CSV-filen kunde inte sparas här", body: DOWNLOAD_BLOCKED_MSG, tone: "info" });
     const esc = (s: string) => `"${s.replace(/"/g, '""')}"`;
     const csv = ["Tid;Användare;Åtgärd;Produktion;Beskrivning", ...rows.map((a) => [a.at, L.person(a.actorId)?.name ?? a.actorId, a.action, L.production(a.productionId ?? "")?.title ?? "", a.summary].map(esc).join(";"))].join("\n");
     const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });

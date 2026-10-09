@@ -399,7 +399,26 @@ export const useStore = create<State>()(
     {
       name: STORAGE_KEY,
       version: 1,
-      storage: createJSONStorage(() => localStorage),
+      // Storage access may throw (private mode, blocked site data) – never let that break the app.
+      storage: createJSONStorage(() => ({
+        getItem: (k: string) => {
+          try {
+            return localStorage.getItem(k);
+          } catch {
+            return null;
+          }
+        },
+        setItem: (k: string, v: string) => {
+          try {
+            localStorage.setItem(k, v);
+          } catch {}
+        },
+        removeItem: (k: string) => {
+          try {
+            localStorage.removeItem(k);
+          } catch {}
+        },
+      })),
       partialize: (s) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { hydrated, ...rest } = s;
@@ -413,7 +432,7 @@ export const useStore = create<State>()(
 /** Keep several tabs / the split-screen demo in sync. */
 export function startCrossTabSync() {
   const handler = (e: StorageEvent) => {
-    if (e.key === STORAGE_KEY) useStore.persist.rehydrate();
+    if (e.key === STORAGE_KEY) useStore.persist?.rehydrate();
   };
   window.addEventListener("storage", handler);
   return () => window.removeEventListener("storage", handler);

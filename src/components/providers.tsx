@@ -14,7 +14,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let stop = () => {};
     (async () => {
-      await useStore.persist.rehydrate();
+      try {
+        await useStore.persist?.rehydrate();
+      } catch {
+        // Storage unavailable – run in memory with fresh demo data.
+      }
       const { seededAt, resetDemo } = useStore.getState();
       // Keep the demo "live": if stored data was seeded in another week, re-seed.
       if (!seededAt || Math.abs(differenceInCalendarDays(new Date(), parseISO(seededAt))) > 6) {

@@ -143,7 +143,10 @@ export default function PersonalRehearsal() {
                     <Avatar name={c.p.name} hue={c.p.hue} size={36} />
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold">{c.p.name}</div>
-                      <div className="text-xs text-ink-3">{c.role}</div>
+                      <div className="text-xs text-ink-3">
+                        {c.role}
+                        {c.p.phone && <span className="tabular select-all"> · {c.p.phone}</span>}
+                      </div>
                     </div>
                     {c.p.phone && (
                       <a href={`tel:${c.p.phone.replace(/\s/g, "")}`} className="inline-flex size-11 items-center justify-center rounded-xl bg-accent-soft text-accent" aria-label={`Ring ${c.p.name}`}>

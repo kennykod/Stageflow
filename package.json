@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "postinstall": "node scripts/copy-pdf-worker.mjs",
-    "demo:pdf": "node scripts/make-sample-pdf.mjs"
+    "demo:pdf": "node scripts/make-sample-pdf.mjs",
+    "build:artifact": "node artifact/build.mjs"
   },
   "engines": {
     "node": ">=20"

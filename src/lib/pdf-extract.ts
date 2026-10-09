@@ -1,5 +1,7 @@
 "use client";
 
+import { ASSET_BASE } from "./env";
+
 /**
  * Client-side PDF text extraction with pdf.js. The file never leaves the browser
  * in this prototype. Scanned PDFs (images only) yield no text – OCR would be done
@@ -7,7 +9,7 @@
  */
 export async function extractPdfText(file: ArrayBuffer, onProgress?: (page: number, total: number) => void): Promise<{ text: string; pages: number; empty: boolean }> {
   const pdfjs = await import("pdfjs-dist");
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+  pdfjs.GlobalWorkerOptions.workerSrc = `${ASSET_BASE}pdf.worker.min.mjs`;
   const doc = await pdfjs.getDocument({ data: new Uint8Array(file), isEvalSupported: false }).promise;
   const out: string[] = [];
   for (let i = 1; i <= doc.numPages; i++) {

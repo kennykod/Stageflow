@@ -10,6 +10,7 @@ import { toast } from "@/components/ui/overlay";
 import { PERSONAS } from "@/lib/seed/people";
 import type { PersonalView } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { DOWNLOADS_BLOCKED, DOWNLOAD_BLOCKED_MSG } from "@/lib/env";
 
 export default function Profile() {
   const { me, meId, myProductions } = usePersonalData();
@@ -22,6 +23,7 @@ export default function Profile() {
   const { dark, toggle } = useTheme();
 
   const exportMyData = () => {
+    if (DOWNLOADS_BLOCKED) return toast({ title: "Exporten kunde inte sparas här", body: DOWNLOAD_BLOCKED_MSG, tone: "info" });
     // Data minimisation / GDPR art. 15 – export what StageFlow holds about *you*.
     const s = useStore.getState();
     const data = {

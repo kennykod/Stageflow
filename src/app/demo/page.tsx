@@ -8,6 +8,7 @@ import { GuideList } from "@/components/demo-guide";
 import { Button } from "@/components/ui/primitives";
 import { toast } from "@/components/ui/overlay";
 import { useStore } from "@/lib/store";
+import { pageHref } from "@/lib/env";
 
 export default function SplitDemo() {
   const [controlSrc, setControlSrc] = useState({ path: "/control", n: 0 });
@@ -57,14 +58,14 @@ export default function SplitDemo() {
           <div className="mb-2 flex items-center gap-2 text-xs font-semibold tracking-wide text-ink-3 uppercase">
             <Monitor className="size-3.5" /> StageFlow Control
           </div>
-          <iframe key={`c-${controlSrc.n}`} src={controlSrc.path} title="StageFlow Control" className="min-h-0 flex-1 rounded-2xl border border-line bg-canvas shadow-[var(--shadow-card)]" />
+          <iframe key={`c-${controlSrc.n}`} data-sf-pane="control" src={pageHref(controlSrc.path)} title="StageFlow Control" className="min-h-0 flex-1 rounded-2xl border border-line bg-canvas shadow-[var(--shadow-card)]" />
         </section>
         <section className="flex shrink-0 flex-col">
           <div className="mb-2 flex items-center gap-2 text-xs font-semibold tracking-wide text-ink-3 uppercase">
             <Smartphone className="size-3.5" /> StageFlow Personal
           </div>
           <div className="min-h-0 flex-1 rounded-[44px] border-[10px] border-[#111522] bg-[#111522] shadow-[var(--shadow-lift)]">
-            <iframe key={`p-${personalSrc.n}`} src={personalSrc.path} title="StageFlow Personal" className="h-full w-[390px] rounded-[34px] bg-canvas" />
+            <iframe key={`p-${personalSrc.n}`} data-sf-pane="personal" src={pageHref(personalSrc.path)} title="StageFlow Personal" className="h-full w-[390px] rounded-[34px] bg-canvas" />
           </div>
         </section>
       </div>

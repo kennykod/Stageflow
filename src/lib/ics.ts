@@ -1,4 +1,5 @@
 import type { RehearsalData, Room, Production } from "./types";
+import { DOWNLOADS_BLOCKED } from "./env";
 
 const esc = (s: string) => s.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
 const dt = (iso: string) => iso.replace(/[-:]/g, "") + "00";
@@ -24,7 +25,9 @@ export function buildICS(id: string, d: RehearsalData, room: Room | undefined, p
   return lines.join("\r\n");
 }
 
-export function downloadICS(filename: string, content: string) {
+/** Returns false when downloads are unavailable (artifact preview). */
+export function downloadICS(filename: string, content: string): boolean {
+  if (DOWNLOADS_BLOCKED) return false;
   const blob = new Blob([content], { type: "text/calendar;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -34,4 +37,5 @@ export function downloadICS(filename: string, content: string) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+  return true;
 }
