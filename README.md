@@ -39,6 +39,7 @@ npm test                     # unit tests (Vitest)
 npm run test:e2e             # end-to-end + accessibility tests (Playwright; starts the dev server)
 npm run demo:pdf             # regenerate the fictional sample script PDF
 npm run build:artifact       # standalone static build in dist-artifact/ (published as a claude.ai Artifact)
+npm run build:single         # ONE self-contained file: dist-artifact/stageflow.html (open directly, no server)
 ```
 
 **Standalone build.** `artifact/` bundles the same pages with Vite and an in-memory router that stands in for `next/link` and `next/navigation`. The result is a static site that runs without a server. In that build, file downloads (.ics, CSV, JSON export) are switched off and a short notice explains why.

@@ -8,7 +8,7 @@ export default defineConfig({
   base: "./",
   publicDir: false,
   define: {
-    "process.env.NEXT_PUBLIC_STAGEFLOW_ARTIFACT": JSON.stringify("1"),
+    "process.env.NEXT_PUBLIC_STAGEFLOW_ARTIFACT": JSON.stringify(process.env.SF_MODE || "1"),
     "process.env.NODE_ENV": JSON.stringify("production"),
   },
   resolve: {
